@@ -10,7 +10,7 @@ Benevolent Guardian Akari is a score-based arcade game where Akari must defend h
 
 ## Challenges
 - Certain students will take more time to defeat than others with stronger attacks and defensive options.
-- Bosses will test Akari's skill.
+- Bosses will appear to test Akari's abilities.
 - Short sentence of any skill or topic that needs to be learnt or researched.
 
 ## Outcomes
