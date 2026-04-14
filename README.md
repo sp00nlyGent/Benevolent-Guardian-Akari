@@ -27,8 +27,9 @@ Benevolent Guardian Akari is a score-based arcade game where Akari must defend h
 - Week 2
   1. Add boss and enemy character graphics to game
   2. Add enemy systems into game
-  3. Add win state
+  3. Add win state to game
 
 - Final Week
   1. Add boss systems into game
   2. Add true win state to game
+  3. add end credits
