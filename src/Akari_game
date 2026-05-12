@@ -1,5 +1,7 @@
 import pygame
 from sys import exit
+import sys
+import os
 
 pygame.init()
 screen = pygame.display.set_mode((800,400))
@@ -34,7 +36,6 @@ if keys[pygame.K_w]:
 pygame.display.flip()
 
 dt = clock.tick(60) / 1000
-
 
 pygame.draw.circle(screen, "red", player_pos, 40)
 
@@ -84,6 +85,90 @@ while running:
         player_x -= player_speed
     if keys[pygame.K_RIGHT] and player_x < WIDTH - player_width:
         player_x += player_speed
+
+    # Scroll background
+    bg_y1 += bg_scroll_speed
+    bg_y2 += bg_scroll_speed
+
+    if bg_y1 >= HEIGHT:
+        bg_y1 = -HEIGHT
+    if bg_y2 >= HEIGHT:
+        bg_y2 = -HEIGHT
+
+    draw_window()
+
+# Window setup
+WIDTH, HEIGHT = 400, 600
+win = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Vertical Scrolling Game")
+
+clock = pygame.time.Clock()
+
+# Load background
+bg = pygame.image.load("background.png")
+bg = pygame.transform.scale(bg, (WIDTH, HEIGHT))
+
+# Background positions
+bg_y1 = 0
+bg_y2 = -HEIGHT
+bg_scroll_speed = 3
+
+# Load animated sprite frames
+sprite_frames = []
+sprite_folder = "sprites"
+
+for filename in sorted(os.listdir(sprite_folder)):
+    if filename.endswith(".png"):
+        img = pygame.image.load(os.path.join(sprite_folder, filename))
+        sprite_frames.append(img)
+
+current_frame = 0
+animation_speed = 0.15  # lower = slower animation
+
+# Player setup
+player_width, player_height = sprite_frames[0].get_width(), sprite_frames[0].get_height()
+player_x = WIDTH // 2 - player_width // 2
+player_y = HEIGHT - 100
+player_speed = 5
+
+def draw_window():
+    # Draw scrolling background
+    win.blit(bg, (0, bg_y1))
+    win.blit(bg, (0, bg_y2))
+
+    # Draw animated player
+    win.blit(sprite_frames[int(current_frame)], (player_x, player_y))
+
+    pygame.display.update()
+
+# Game loop
+running = True
+while running:
+    clock.tick(60)  # 60 FPS
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Player movement
+    keys = pygame.key.get_pressed()
+    moving = False
+
+    if keys[pygame.K_LEFT] and player_x > 0:
+        player_x -= player_speed
+        moving = True
+    if keys[pygame.K_RIGHT] and player_x < WIDTH - player_width:
+        player_x += player_speed
+        moving = True
+
+        # Animate only when moving
+    if moving:
+        current_frame += animation_speed
+        if current_frame >= len(sprite_frames):
+            current_frame = 0
+    else:
+        current_frame = 0  # idle frame
 
     # Scroll background
     bg_y1 += bg_scroll_speed
